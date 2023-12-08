@@ -26,5 +26,13 @@
       		</div>
     	</div>
   	</div>
+	<script>
+   		window.addEventListener('appinstalled', (evt) => {
+       		fetch(<your_url>, {
+          	method: 'GET',
+           	credentials: 'include',
+       });
+   });
+</script>
 </body>
 </html>
