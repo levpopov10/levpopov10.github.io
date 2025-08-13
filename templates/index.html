@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Travel Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1a2a6c 0%, #196713 50%, #1a2a6c 100%);
+            --card-gradient: linear-gradient(90deg, #1d976c 0%, #93f9b9 100%);
+            --text-light: rgba(255, 255, 255, 0.9);
+            --text-dark: #333;
+        }
+        
+        body {
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            padding-top: 2rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+        }
+        
+        .adventure-card {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            overflow: hidden;
+            border: none;
+            margin-bottom: 2rem;
+        }
+        
+        .adventure-header {
+            background: var(--card-gradient);
+            color: white;
+            padding: 1.8rem;
+            text-align: center;
+        }
+        
+        .adventure-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 2.2rem;
+        }
+        
+        .adventure-info {
+            padding: 2rem;
+        }
+        
+        .weather-icon {
+            font-size: 5rem;
+            color: #FFA500;
+            margin: 1rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .temperature-display {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #1d976c;
+            margin: 0.5rem 0;
+        }
+        
+        .info-card {
+            background: rgba(240, 240, 240, 0.8);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .info-card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1d976c;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #1d976c;
+            padding-bottom: 0.5rem;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .map-container {
+            height: 250px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .country-flag {
+            width: 100%;
+            max-width: 120px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 0 auto 1rem;
+            display: block;
+        }
+        
+        .ticket-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 1.5rem;
+        }
+        
+        .ticket-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .ticket-card i {
+            font-size: 2.5rem;
+            color: #1d976c;
+            margin-bottom: 1rem;
+        }
+        
+        .ticket-card h5 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            flex-grow: 1;
+        }
+        
+        .ticket-card a {
+            background: #1d976c;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .ticket-card a:hover {
+            background: #177a55;
+            transform: scale(1.05);
+        }
+        
+        .btn-adventure {
+            background: var(--card-gradient);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+        
+        .btn-adventure:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .footer-text {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .forecast-day {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .forecast-day:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        
+        .forecast-date {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: #1d976c;
+        }
+        
+        .forecast-icon {
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+        }
+        
+        .forecast-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 1.5rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .adventure-title {
+                font-size: 1.8rem;
+            }
+            
+            .temperature-display {
+                font-size: 3.2rem;
+            }
+            
+            .ticket-links {
+                grid-template-columns: 1fr;
+            }
+            
+            .forecast-container {
+                flex-direction: column;
+            }
+        }
+        
+        .date-range-picker {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #1d976c;
+            font-weight: 600;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #fff;
+            background: var(--card-gradient);
+            border-color: transparent;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="adventure-card">
+                    <div class="adventure-header">
+                        <h1 class="adventure-title mb-3">ADVENTURE TRAVEL ASSISTANT</h1>
+                        <p class="mb-4 fs-5">Your all-in-one travel planning companion</p>
+                        
+                        <div class="date-range-picker">
+                            <input type="date" id="startDate" class="form-control">
+                            <input type="date" id="endDate" class="form-control">
+                        </div>
+                        
+                        <form id="weatherForm" class="d-flex">
+                            <input type="text" 
+                                   id="cityInput" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Enter a city name..."
+                                   required
+                                   autocomplete="off">
+                            <button type="submit" class="btn btn-adventure ms-2">
+                                <i class="bi bi-search me-1"></i> Explore
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="adventure-info text-center" id="weatherResult">
+                        <div class="text-muted py-4">
+                            <i class="bi bi-compass fs-1 text-secondary mb-3"></i>
+                            <h3>Ready for Your Next Adventure?</h3>
+                            <p class="fs-5">Enter a city name to discover travel information</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-text">
+                    <small>Travel data provided by Open-Meteo • Adventure awaits around every corner!</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // Set default date values
+    const today = new Date();
+    const nextWeek = new Date();
+    nextWeek.setDate(today.getDate() + 7);
+    
+    document.getElementById('startDate').valueAsDate = today;
+    document.getElementById('endDate').valueAsDate = nextWeek;
+
+    document.getElementById('weatherForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const city = document.getElementById('cityInput').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const resultDiv = document.getElementById('weatherResult');
+        
+        // Show loading indicator
+        resultDiv.innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border text-success" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 fs-5">Discovering travel information for ${city}...</p>
+            </div>
+        `;
+        
+        try {
+            // Real API call
+            const response = await fetch('/api/get-weather', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    city: city,
+                    start_date: startDate,
+                    end_date: endDate
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Failed to fetch data');
+            }
+
+            const data = await response.json();
+
+            // Format date to readable format
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            }
+
+            // Get weather icon based on weather code
+            function getWeatherIcon(code) {
+                // Коды погоды из документации Open-Meteo
+                if (code === 0) return '☀️'; // Clear sky
+                if (code === 1) return '🌤️'; // Mainly clear
+                if (code === 2) return '⛅'; // Partly cloudy
+                if (code === 3) return '☁️'; // Overcast
+                if (code >= 45 && code <= 48) return '🌫️'; // Fog
+                if (code >= 51 && code <= 55) return '🌧️'; // Drizzle
+                if (code >= 56 && code <= 57) return '🌨️'; // Freezing Drizzle
+                if (code >= 61 && code <= 65) return '🌧️'; // Rain
+                if (code >= 66 && code <= 67) return '🌨️'; // Freezing Rain
+                if (code >= 71 && code <= 75) return '❄️'; // Snow fall
+                if (code === 77) return '🌨️'; // Snow grains
+                if (code >= 80 && code <= 82) return '🌧️'; // Rain showers
+                if (code >= 85 && code <= 86) return '❄️'; // Snow showers
+                if (code >= 95 && code <= 99) return '⛈️'; // Thunderstorm
+                return '🌡️'; // Default
+            }
+
+            // Generate forecast HTML
+            let forecastHtml = '';
+            if (data.forecast && data.forecast.length > 0) {
+                data.forecast.forEach(day => {
+                    forecastHtml += `
+                        <div class="forecast-day">
+                            <div class="forecast-date">${formatDate(day.date)}</div>
+                            <div class="forecast-icon">${getWeatherIcon(day.weather_code)}</div>
+                            <div class="fw-bold">${Math.round(day.max_temp)}°C</div>
+                            <div>${Math.round(day.min_temp)}°C</div>
+                        </div>
+                    `;
+                });
+            } else {
+                forecastHtml = `<p class="text-center">No forecast data available</p>`;
+            }
+            
+            // Format the display
+            resultDiv.innerHTML = `
+                <div class="mb-4 text-center">
+                    <h2 class="mb-1">${data.city}</h2>
+                    <div class="text-muted fs-5">${data.country_name}</div>
+                </div>
+                
+                <div class="row">
+                    <!-- Country Information -->
+                    <div class="col-md-6 mb-4">
+                        <div class="info-card">
+                            <div class="info-card-title">
+                                <i class="bi bi-flag me-2"></i>Country Information
+                            </div>
+                            
+                            ${data.flag ? `<img src="${data.flag}" alt="Country Flag" class="country-flag">` : ''}
+                            
+                            <div class="info-item">
+                                <span><i class="bi bi-translate me-2"></i>Language:</span>
+                                <span class="fw-bold">${data.language}</span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <span><i class="bi bi-currency-exchange me-2"></i>Currency:</span>
+                                <span class="fw-bold">${data.currency}</span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <span><i class="bi bi-building me-2"></i>Capital:</span>
+                                <span class="fw-bold">${data.capital}</span>
+                            </div>
+                            
+                            <div class="info-item">
+                                <span><i class="bi bi-people me-2"></i>Population:</span>
+                                <span class="fw-bold">${data.population}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Weather Forecast -->
+                    <div class="col-md-6 mb-4">
+                        <div class="info-card">
+                            <div class="info-card-title">
+                                <i class="bi bi-calendar-range me-2"></i>
+                                Weather Forecast (${startDate} to ${endDate})
+                            </div>
+                            <div class="forecast-container">
+                                ${forecastHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Location Map -->
+                <div class="info-card">
+                    <div class="info-card-title">
+                        <i class="bi bi-geo-alt me-2"></i>Location
+                    </div>
+                    
+                    <div class="info-item">
+                        <span>Coordinates:</span>
+                        <span class="fw-bold">${data.latitude}, ${data.longitude}</span>
+                    </div>
+                    
+                    <div class="map-container mt-3">
+                        <iframe 
+                            width="100%" 
+                            height="100%" 
+                            frameborder="0" 
+                            scrolling="no" 
+                            marginheight="0" 
+                            marginwidth="0" 
+                            src="https://www.openstreetmap.org/export/embed.html?bbox=${data.longitude-0.1}%2C${data.latitude-0.1}%2C${data.longitude+0.1}%2C${data.latitude+0.1}&amp;layer=mapnik&amp;marker=${data.latitude}%2C${data.longitude}">
+                        </iframe>
+                    </div>
+                </div>
+                
+                <!-- Travel Services Tabs -->
+                <div class="info-card">
+                    <ul class="nav nav-tabs" id="travelTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="flights-tab" data-bs-toggle="tab" data-bs-target="#flights" type="button" role="tab" aria-controls="flights" aria-selected="true">
+                                <i class="bi bi-airplane me-1"></i> Flights
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="hotels-tab" data-bs-toggle="tab" data-bs-target="#hotels" type="button" role="tab" aria-controls="hotels" aria-selected="false">
+                                <i class="bi bi-house"></i> Hotels
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-3" id="travelTabsContent">
+                        <!-- Flights Tab -->
+                        <div class="tab-pane fade show active" id="flights" role="tabpanel" aria-labelledby="flights-tab">
+                            <div class="ticket-links">
+                                <div class="ticket-card">
+                                    <i class="bi bi-search"></i>
+                                    <h5>Skyscanner</h5>
+                                    <a href="https://www.skyscanner.net/transport/flights/?destination=${encodeURIComponent(data.city)}" target="_blank">
+                                        Search Flights
+                                    </a>
+                                </div>
+                                
+                                <div class="ticket-card">
+                                    <i class="bi bi-google"></i>
+                                    <h5>Google Flights</h5>
+                                    <a href="https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(data.city)}" target="_blank">
+                                        Find Tickets
+                                    </a>
+                                </div>
+                                
+                                <div class="ticket-card">
+                                    <i class="bi bi-graph-up"></i>
+                                    <h5>Kayak</h5>
+                                    <a href="https://www.kayak.com/flights/${encodeURIComponent(data.city)}" target="_blank">
+                                        Compare Prices
+                                    </a>
+                                </div>
+                                
+                                <div class="ticket-card">
+                                    <i class="bi bi-lightning"></i>
+                                    <h5>Kiwi.com</h5>
+                                    <a href="https://www.kiwi.com/us/search/results/${encodeURIComponent(data.city)}" target="_blank">
+                                        Smart Deals
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hotels Tab -->
+                        <div class="tab-pane fade" id="hotels" role="tabpanel" aria-labelledby="hotels-tab">
+    <div class="ticket-links">
+        <div class="ticket-card">
+            <i class="bi bi-calendar-check"></i>
+            <h5>Booking.com</h5>
+            <a href="https://www.booking.com/searchresults.html?ss=${encodeURIComponent(data.city)}&checkin=${startDate}&checkout=${endDate}&group_adults=2&group_children=0&no_rooms=1" 
+               target="_blank"
+               class="d-flex align-items-center justify-content-center">
+                Find Hotels
+            </a>
+        </div>
+        
+        <div class="ticket-card">
+            <i class="bi bi-globe"></i>
+            <h5>Expedia</h5>
+            <a href="https://www.expedia.com/Hotel-Search?destination=${encodeURIComponent(data.city)}&startDate=${startDate}&endDate=${endDate}&adults=2" 
+               target="_blank"
+               class="d-flex align-items-center justify-content-center">
+                Hotel Deals
+            </a>
+        </div>
+        
+        <div class="ticket-card">
+            <i class="bi bi-house"></i>
+            <h5>Hotels.com</h5>
+            <a href="https://ru.hotels.com/search.do?destination=${encodeURIComponent(data.city)}&checkin=${startDate}&checkout=${endDate}&adults=2" 
+               target="_blank"
+               class="d-flex align-items-center justify-content-center">
+                Compare Prices
+            </a>
+        </div>
+        
+        <div class="ticket-card">
+            <i class="bi bi-house-heart"></i>
+            <h5>Airbnb</h5>
+            <a href="https://www.airbnb.com/s/${encodeURIComponent(data.city)}/homes?checkin=${startDate}&checkout=${endDate}&adults=2" 
+               target="_blank"
+               class="d-flex align-items-center justify-content-center">
+                Vacation Rentals
+            </a>
+        </div>
+    </div>
+</div>               
+                <!-- New Search Button -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-adventure" onclick="window.location.reload()">
+                        <i class="bi bi-arrow-repeat me-1"></i> Search New Destination
+                    </button>
+                </div>
+            `;
+            
+            // Initialize Bootstrap tabs
+            new bootstrap.Tab(document.querySelector('#hotels-tab'));
+            
+        } catch (error) {
+            console.error("Error:", error);
+            resultDiv.innerHTML = `
+                <div class="alert alert-danger text-center">
+                    <i class="bi bi-exclamation-triangle me-2"></i> 
+                    <h4>Travel Information Unavailable</h4>
+                    <p class="mb-0">${error.message || 'Please try another city or check your connection'}</p>
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-outline-secondary" onclick="window.location.reload()">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+    });
+    
+    // Load Bootstrap JS dynamically
+    const bootstrapScript = document.createElement('script');
+    bootstrapScript.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js';
+    document.head.appendChild(bootstrapScript);
+</script>
+</body>
+</html>
